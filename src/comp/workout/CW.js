@@ -115,7 +115,7 @@ const CW = () => {
                             return (
                               <tr key={subItem}>
                                 <td><input type="text" name="workout" value={subKey.workout} disabled={true}/></td>
-                                <td><input type="number" name="reps" placeholder={subKey.reps}/></td>
+                                <td><input type="number" name="reps" placeholder={subKey.reps} disabled={true}/></td>
                               </tr>
                             )
                           })}

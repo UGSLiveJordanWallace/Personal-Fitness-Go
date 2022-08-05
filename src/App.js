@@ -22,7 +22,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Profile />}/>
             <Route path="mile-log" element={<MileLog/>}/>
-            <Route path="workout" element={<Workout/>}>
+            <Route path="workout" element={<Workout/>}>  
             <Route path="current-workouts" element={<CW/>}/>
             <Route path="edit-workouts" element={<EW/>}/>
             </Route>

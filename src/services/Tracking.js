@@ -4,6 +4,8 @@ export default class TrackMiles {
             navigator.geolocation.getCurrentPosition(position => {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
+                console.log(this.latitude);
+                console.log(this.longitude);
             }, () => {
                 return "Did not receive users position";
             });

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Card, Form } from "react-bootstrap";
 import  TrackMiles  from "../services/Tracking";
-import { googleAuthProvider } from '../firebase';
 
 export default function Milelog() {
   const { currentUser } = useAuth();
@@ -30,6 +29,7 @@ export default function Milelog() {
   function handleStart(e) {
     e.preventDefault();
     setIsRunning(true);
+    mileTracker.startTracking();
   }
   function handleStop(e) {
     e.preventDefault();

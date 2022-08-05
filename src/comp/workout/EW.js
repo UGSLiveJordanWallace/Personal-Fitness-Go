@@ -79,7 +79,7 @@ const EW = () => {
                                     return (
                                         <tr key={item}>
                                             <td><input type={"text"} key={item} name="workout" value={key.workout} onChange={(e) => handleChange(e, item)}/></td>
-                                            <td><input type={"number"} key={item} name="reps" value={key.reps} onChange={(e) => handleChange(e, item)} min="1" max="99"/></td>
+                                            <td><input type={"number"} key={item} name="reps" value={key.reps} onChange={(e) => handleChange(e, item)} min="1" max="500"/></td>
                                         </tr>
                                     )
                                 })}

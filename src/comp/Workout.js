@@ -27,7 +27,7 @@ export default function Workout() {
           {onWorkouts !== undefined ? <Nav.Link href="/workout/current-workouts" active={onWorkouts}>Workout</Nav.Link>:<Nav.Link href="/workout/current-workouts" active={false}>Workout</Nav.Link>}
         </Nav.Item>
         <Nav.Item>
-          {onWorkouts !== undefined ? <Nav.Link href="/workout/edit-workouts" active={!onWorkouts}>Edit Workouts</Nav.Link>:<Nav.Link href="/workout/current-workouts" active={false}>Edits Workout</Nav.Link>}
+          {onWorkouts !== undefined ? <Nav.Link href="/workout/edit-workouts" active={!onWorkouts}>Edit Workouts</Nav.Link>:<Nav.Link href="/workout/edit-workouts" active={false}>Edits Workout</Nav.Link>}
         </Nav.Item>
       </Nav>
       <Outlet/>

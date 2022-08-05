@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Card, Form } from "react-bootstrap";
-import  TrackMiles  from "../services/Tracking";
+import { Card, Form, Button } from 'react-bootstrap';
+import TrackMiles from '../services/Tracking';
 
 export default function Milelog() {
   const { currentUser } = useAuth();
@@ -21,8 +21,8 @@ export default function Milelog() {
   let tempSecs = 0;
 
   useEffect(() => {
-    if(currentUser === null) {
-      navigate("/", { replace: true });
+    if (currentUser === null) {
+      navigate('/', { replace: true });
     }
   }, []);
 
@@ -41,7 +41,7 @@ export default function Milelog() {
     tempMins = parseInt(tempMins);
     tempSecs = parseInt(tempSecs);
 
-    if (isRunning ) {
+    if (isRunning) {
       setTimeoutInt(setTimeout(timing, 1000));
 
       if (tempSecs > 59) {
@@ -56,7 +56,7 @@ export default function Milelog() {
       tempSecs = tempSecs + 1;
     } else if (!isRunning) {
       clearTimeout(timeoutInt);
-      return
+      return;
     }
     setHours(tempHours);
     setMins(tempMins);
@@ -65,31 +65,45 @@ export default function Milelog() {
 
   useEffect(() => {
     timing();
-  }, [isRunning])
+  }, [isRunning]);
 
   return (
     <>
       <Card>
-        <Card.Header style={{textAlign: "center", fontSize: "3em"}}>Enter Your Run</Card.Header>
+        <Card.Header style={{ textAlign: 'center', fontSize: '3em' }}>
+          Enter Your Run
+        </Card.Header>
         <Card.Body>
           <Form>
             <Form.Group>
               <Form.Label>Miles Traversed</Form.Label>
-              <Form.Control/>
+              <Form.Control />
             </Form.Group>
             <Form.Group>
               <Form.Label>Time Elapsed</Form.Label>
-              <Form.Control value={`${hours}:${mins}:${secs}`}/>
+              <Form.Control defaultValue={`${hours}:${mins}:${secs}`} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Start Run</Form.Label>
-              {!isRunning ? <input type="button" className='input-btn' value="Start" style={{background: 'rgb(18, 255, 16)'}} onClick={handleStart}/>
-              :
-              <input type="button" className='input-btn' value="Stop" style={{background: 'rgb(255, 18, 16)'}} onClick={handleStop}/>}
-            </Form.Group>  
+              {!isRunning ? (
+                <Button
+                  style={{ border: 'none', background: 'rgb(18, 255, 16)' }}
+                  onClick={handleStart}
+                >
+                  Start
+                </Button>
+              ) : (
+                <Button
+                  style={{ background: 'rgb(255, 18, 16)' }}
+                  onClick={handleStop}
+                >
+                  Stop
+                </Button>
+              )}
+            </Form.Group>
           </Form>
         </Card.Body>
       </Card>
     </>
-  )
+  );
 }

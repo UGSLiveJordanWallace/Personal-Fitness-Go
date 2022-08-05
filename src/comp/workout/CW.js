@@ -103,7 +103,7 @@ const CW = () => {
                 <Accordion.Item eventKey={item} key={item}>
                   <Accordion.Header>{key.title}</Accordion.Header>
                   <Accordion.Body>
-                    <Table>
+                    <Table size="lg" responsive={true}>
                       <thead>
                           <tr>
                               <th>Workout Name</th>
@@ -115,7 +115,7 @@ const CW = () => {
                             return (
                               <tr key={subItem}>
                                 <td><input type="text" name="workout" value={subKey.workout} disabled={true}/></td>
-                                <td><input type="number" name="reps" placeholder={subKey.reps} disabled={true}/></td>
+                                <td><input type="number" name="reps" placeholder={subKey.reps} min={0} max={500} disabled={true}/></td>
                               </tr>
                             )
                           })}
@@ -141,6 +141,7 @@ const CW = () => {
             {workoutTitle && <h4 style={{fontSize: "3em"}}>Workout Name <span style={{color: "red"}}>{workoutTitle}</span></h4>} 
             <h4 style={{fontSize: "3em", padding: "10px"}}>Time <span style={{color: "limegreen"}}>{hours}:{mins}:{secs}</span></h4>
             <Button onClick={(e) => handleSubmit(e)} variant="primary" style={{width: "100%", fontSize: "2em"}}>Submit Workout</Button>
+            <Button onClick={() => window.location.reload()} variant="dark" style={{width: "75%", fontSize: "1.25em", marginTop: "0.5em"}}>Go Back</Button>
         </Card.Body>
       </Card>}
     </>

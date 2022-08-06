@@ -25,6 +25,7 @@ export default function Home() {
 
     try {
       await logout();
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
@@ -40,7 +41,7 @@ export default function Home() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/workout">Workout</Nav.Link>
-            {/* <Nav.Link href="/mile-log">Mile Logging</Nav.Link> */}
+            <Nav.Link href="/mile-log">Mile Logging</Nav.Link>
           </Nav>
           <Nav>
             {!currentUser && <Button onClick={handleLogin}>Login/Signup</Button>}

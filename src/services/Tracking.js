@@ -22,7 +22,13 @@ export default class TrackMiles {
         navigator.geolocation.watchPosition(position => {
             console.log(position.coords.latitude);
             console.log(position.coords.longitude);
-        })
+
+            // TODO: haversine implementation for distance calculation 
+            // km to m conversion factor 1.61 m = km/1.61
+        })               
     }
+
+    // TODO: Initialize Haversine Function
+    // Reference: http://www.movable-type.co.uk/scripts/latlong.html
 
 }

@@ -87,14 +87,24 @@ export default function Milelog() {
               <Form.Label>Start Run</Form.Label>
               {!isRunning ? (
                 <Button
-                  style={{ border: 'none', background: 'rgb(18, 255, 16)' }}
+                  style={{
+                    border: 'none',
+                    background: 'rgb(18, 255, 16)',
+                    width: '100%',
+                    fontSize: '2.4em',
+                  }}
                   onClick={handleStart}
                 >
                   Start
                 </Button>
               ) : (
                 <Button
-                  style={{ background: 'rgb(255, 18, 16)' }}
+                  style={{
+                    border: 'none',
+                    background: 'rgb(255, 18, 16)',
+                    width: '100%',
+                    fontSize: '2.4em',
+                  }}
                   onClick={handleStop}
                 >
                   Stop

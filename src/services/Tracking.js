@@ -4,31 +4,49 @@ export default class TrackMiles {
             navigator.geolocation.getCurrentPosition(position => {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
-                console.log(this.latitude);
-                console.log(this.longitude);
+                this.currentMilesTraversed = 0;
             }, () => {
                 return "Did not receive users position";
             });
         }
     }
 
-    startTracking() {
+    startTracking(callback) {
         const options = {
             enableHighAccuracy: true,
             maximumAge: 3000,
             timeout: 3000
         }
 
-        navigator.geolocation.watchPosition(position => {
-            console.log(position.coords.latitude);
-            console.log(position.coords.longitude);
+        console.log("Tracking started");
 
-            // TODO: haversine implementation for distance calculation 
-            // km to m conversion factor 1.61 m = km/1.61
-        })               
+        this.currentMilesTraversed = 0;
+        callback(this.currentMilesTraversed);
+
+        navigator.geolocation.watchPosition(position => {
+            // Implementation for distance in miles latitude and longitude 
+            // NM to M conversion factor 1.1508 NM = 1 M
+            const newDistance = Math.round((this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508) * 10) / 10;
+            this.currentMilesTraversed += newDistance;
+
+            callback(this.currentMilesTraversed);
+
+            // Reseting the position properties to new latitude and longitude values
+            this.latitude = position.coords.latitude;
+            this.longitude = position.coords.longitude;
+        }, null, options);        
     }
 
-    // TODO: Initialize Haversine Function
-    // Reference: http://www.movable-type.co.uk/scripts/latlong.html
+    // getDistance from latitude and longitude coordinates using NM Haversine Formula
+    getDistance(lat1, long1, lat2, long2) {
+        const R = 3440.1; // NM around the earth
+        const nlat1 = this.degreesToRadians(lat1);
+        const nlat2 = this.degreesToRadians(lat2);
+        const nlong12 = this.degreesToRadians(long2 - long1);
+        return Math.acos((Math.sin(nlat1) * Math.sin(nlat2)) + Math.cos(nlat1) * Math.cos(nlat2) * Math.cos(nlong12)) * R;
+    }
 
+    degreesToRadians(degrees) { 
+        return degrees * (Math.PI/180);    
+    }
 }

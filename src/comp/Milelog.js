@@ -9,6 +9,7 @@ export default function Milelog() {
   const navigate = useNavigate();
 
   const mileTracker = new TrackMiles();
+  const [currentMilesTraversed, setCurrentMilesTraversed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timeoutInt, setTimeoutInt] = useState();
 
@@ -29,7 +30,9 @@ export default function Milelog() {
   function handleStart(e) {
     e.preventDefault();
     setIsRunning(true);
-    mileTracker.startTracking();
+    mileTracker.startTracking((milesTraveled) => {
+      setCurrentMilesTraversed(milesTraveled);
+    });
   }
   function handleStop(e) {
     e.preventDefault();
@@ -74,44 +77,33 @@ export default function Milelog() {
           Enter Your Run
         </Card.Header>
         <Card.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>Miles Traversed</Form.Label>
-              <Form.Control />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Time Elapsed</Form.Label>
-              <Form.Control defaultValue={`${hours}:${mins}:${secs}`} />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Start Run</Form.Label>
-              {!isRunning ? (
-                <Button
-                  style={{
-                    border: 'none',
-                    background: 'rgb(18, 255, 16)',
-                    width: '100%',
-                    fontSize: '2.4em',
-                  }}
-                  onClick={handleStart}
-                >
-                  Start
-                </Button>
-              ) : (
-                <Button
-                  style={{
-                    border: 'none',
-                    background: 'rgb(255, 18, 16)',
-                    width: '100%',
-                    fontSize: '2.4em',
-                  }}
-                  onClick={handleStop}
-                >
-                  Stop
-                </Button>
-              )}
-            </Form.Group>
-          </Form>
+          <h3>Time Elapsed: {`${hours}:${mins}:${secs}`}</h3>
+          <h3>Distance Covered: {currentMilesTraversed}</h3>
+          {!isRunning ? (
+            <Button
+              style={{
+                border: 'none',
+                background: 'rgb(18, 255, 16)',
+                width: '100%',
+                fontSize: '2.4em',
+              }}
+              onClick={handleStart}
+            >
+              Start
+            </Button>
+          ) : (
+            <Button
+              style={{
+                border: 'none',
+                background: 'rgb(255, 18, 16)',
+                width: '100%',
+                fontSize: '2.4em',
+              }}
+              onClick={handleStop}
+            >
+              Stop
+            </Button>
+          )}
         </Card.Body>
       </Card>
     </>

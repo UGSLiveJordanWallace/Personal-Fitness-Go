@@ -9,7 +9,7 @@ export default function Milelog() {
   const navigate = useNavigate();
 
   const mileTracker = new TrackMiles();
-  const [currentMilesTraversed, setCurrentMilesTraversed] = useState(0);
+  const [currentMilesTraversed, setCurrentMilesTraversed] = useState("0");
   const [isRunning, setIsRunning] = useState(false);
   const [timeoutInt, setTimeoutInt] = useState();
 
@@ -30,8 +30,8 @@ export default function Milelog() {
   function handleStart(e) {
     e.preventDefault();
     setIsRunning(true);
-    mileTracker.startTracking((milesTraveled) => {
-      setCurrentMilesTraversed(milesTraveled);
+    mileTracker.startTracking((milesTraveled, latitude, longitude, newDistance) => {
+      setCurrentMilesTraversed(`${milesTraveled} ${latitude} ${longitude} ${newDistance}`);
     });
   }
   function handleStop(e) {
@@ -47,11 +47,11 @@ export default function Milelog() {
     if (isRunning) {
       setTimeoutInt(setTimeout(timing, 1000));
 
-      if (tempSecs > 59) {
+      if (tempSecs >= 59) {
         tempMins = tempMins + 1;
         tempSecs = 0;
       }
-      if (tempMins > 59) {
+      if (tempMins >= 59) {
         tempHours = tempHours + 1;
         tempMins = 0;
       }

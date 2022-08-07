@@ -21,15 +21,15 @@ export default class TrackMiles {
         console.log("Tracking started");
 
         this.currentMilesTraversed = 0;
-        callback(this.currentMilesTraversed);
+        callback(this.currentMilesTraversed, this.latitude, this.longitude);
 
         navigator.geolocation.watchPosition(position => {
             // Implementation for distance in miles latitude and longitude 
             // NM to M conversion factor 1.1508 NM = 1 M
-            const newDistance = Math.round((this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508) * 10) / 10;
+            const newDistance = this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508;
             this.currentMilesTraversed += newDistance;
 
-            callback(this.currentMilesTraversed);
+            callback(this.currentMilesTraversed, this.latitude, this.longitude, newDistance);
 
             // Reseting the position properties to new latitude and longitude values
             this.latitude = position.coords.latitude;

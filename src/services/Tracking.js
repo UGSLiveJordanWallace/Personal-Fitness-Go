@@ -4,37 +4,48 @@ export default class TrackMiles {
             navigator.geolocation.getCurrentPosition(position => {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
-                this.currentMilesTraversed = 0;
             }, () => {
                 return "Did not receive users position";
             });
         }
     }
 
-    startTracking(callback) {
+    startTracking(callback, setWatchID) {
         const options = {
             enableHighAccuracy: true,
-            maximumAge: 3000,
-            timeout: 3000
+            timeout: 3000,
+            maximumAge: 0
         }
 
-        console.log("Tracking started");
+        let currentMilesTraversed = 0;
+        callback(currentMilesTraversed, this.latitude, this.longitude, null);
 
-        this.currentMilesTraversed = 0;
-        callback(this.currentMilesTraversed, this.latitude, this.longitude);
-
-        navigator.geolocation.watchPosition(position => {
+        var watchId = navigator.geolocation.watchPosition(position => {
             // Implementation for distance in miles latitude and longitude 
             // NM to M conversion factor 1.1508 NM = 1 M
-            const newDistance = this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508;
-            this.currentMilesTraversed += newDistance;
+            let newDistance = this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508;
+            
+            if (!isNaN(newDistance) && typeof(newDistance) !== undefined) {
+                currentMilesTraversed += newDistance;
+            } else {
+                newDistance = 0;
+            }
 
-            callback(this.currentMilesTraversed, this.latitude, this.longitude, newDistance);
+            callback(currentMilesTraversed, this.latitude, this.longitude, newDistance);
+            setWatchID(watchId);
 
             // Reseting the position properties to new latitude and longitude values
             this.latitude = position.coords.latitude;
             this.longitude = position.coords.longitude;
-        }, null, options);        
+        }, () => {
+            navigator.geolocation.clearWatch(watchId);
+            window.location.reload();
+            console.log("Error occurred while watching position");
+        }, options);
+    }
+
+    stopTracking(watchId) {
+        navigator.geolocation.clearWatch(watchId);
     }
 
     // getDistance from latitude and longitude coordinates using NM Haversine Formula

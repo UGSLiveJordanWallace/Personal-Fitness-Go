@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Card, Form, Button } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import TrackMiles from '../services/Tracking';
+import NoSleep from 'nosleep.js';
 
 export default function Milelog() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  var noSleep = new NoSleep();
 
   const mileTracker = new TrackMiles();
-  const [currentMilesTraversed, setCurrentMilesTraversed] = useState("0");
+  const [currentDebugState, setCurrentDebugState] = useState();
+  const [milesTraveled, setMilesTraveled] = useState("0");
+  const [watchId, setWatchId] = useState();
   const [isRunning, setIsRunning] = useState(false);
+  const [runFinished, setRunFinished] = useState(false);
   const [timeoutInt, setTimeoutInt] = useState();
 
   const [hours, setHours] = useState(0);
@@ -30,13 +35,25 @@ export default function Milelog() {
   function handleStart(e) {
     e.preventDefault();
     setIsRunning(true);
+    setRunFinished(false);
     mileTracker.startTracking((milesTraveled, latitude, longitude, newDistance) => {
-      setCurrentMilesTraversed(`${milesTraveled} ${latitude} ${longitude} ${newDistance}`);
+      setCurrentDebugState(`${latitude} ${longitude} ${newDistance}`);
+      setMilesTraveled(milesTraveled);
+    }, wId => {
+      setWatchId(wId);
     });
+    noSleep.enable();
+    console.log('Start tracking');
   }
   function handleStop(e) {
     e.preventDefault();
     setIsRunning(false);
+    setRunFinished(true);
+    mileTracker.stopTracking(watchId, () => {
+      setCurrentDebugState();
+    });
+    noSleep.disable();
+    console.log("Mile Tracker stopped")
   }
 
   function timing() {
@@ -72,13 +89,14 @@ export default function Milelog() {
 
   return (
     <>
-      <Card>
+      {!runFinished ? <Card>
         <Card.Header style={{ textAlign: 'center', fontSize: '3em' }}>
           Enter Your Run
         </Card.Header>
         <Card.Body>
           <h3>Time Elapsed: {`${hours}:${mins}:${secs}`}</h3>
-          <h3>Distance Covered: {currentMilesTraversed}</h3>
+          <h3>Distance Covered: {milesTraveled}</h3>
+          <h3>Debug Logs: {currentDebugState}</h3>
           {!isRunning ? (
             <Button
               style={{
@@ -106,6 +124,19 @@ export default function Milelog() {
           )}
         </Card.Body>
       </Card>
+      :
+      <Card>
+        <Card.Header style={{ textAlign: 'center' }}>
+          Run Complete
+        </Card.Header>
+        <Card.Body style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <h4 style={{fontSize: "3em"}}>Your Run Info</h4>
+            <h4 style={{fontSize: "3em", padding: "10px"}}>Miles Traveled <span style={{color: "red"}}>{milesTraveled}</span></h4>
+            <h4 style={{fontSize: "3em", padding: "10px"}}>Time <span style={{color: "limegreen"}}>{hours}:{mins}:{secs}</span></h4>
+            {/* <Button onClick={(e) => handleSubmit(e)} variant="primary" style={{width: "100%", fontSize: "2em"}}>Submit Workout</Button> */}
+            <Button onClick={() => window.location.reload()} variant="dark" style={{width: "75%", fontSize: "1.25em", marginTop: "0.5em"}}>Go Back</Button>
+        </Card.Body>
+      </Card>}
     </>
   );
 }

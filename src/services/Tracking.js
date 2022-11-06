@@ -18,7 +18,7 @@ export default class TrackMiles {
         }
 
         let currentMilesTraversed = 0;
-        callback(currentMilesTraversed, this.latitude, this.longitude, null);
+        callback(currentMilesTraversed);
 
         var watchId = navigator.geolocation.watchPosition(position => {
             // Implementation for distance in miles latitude and longitude 
@@ -26,12 +26,12 @@ export default class TrackMiles {
             let newDistance = this.getDistance(this.latitude, this.longitude, position.coords.latitude, position.coords.longitude) * 1.1508;
             
             if (!isNaN(newDistance) && typeof(newDistance) !== undefined) {
-                currentMilesTraversed += newDistance;
+                currentMilesTraversed += Math.round(newDistance * 100) / 100;
             } else {
                 newDistance = 0;
             }
 
-            callback(currentMilesTraversed, this.latitude, this.longitude, newDistance);
+            callback(currentMilesTraversed);
             setWatchID(watchId);
 
             // Reseting the position properties to new latitude and longitude values

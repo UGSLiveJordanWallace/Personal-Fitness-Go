@@ -42,6 +42,7 @@ export default function Home() {
           <Nav className="me-auto">
             <Nav.Link href="/workout">Workout</Nav.Link>
             <Nav.Link href="/mile-log">Mile Logging</Nav.Link>
+            {currentUser && (currentUser.email === "brenda.stephens@bmhs.org" || currentUser.email === "jjbosscore@gmail.com") && <Nav.Link href="/admin">Admin Panel</Nav.Link>}
           </Nav>
           <Nav>
             {!currentUser && <Button onClick={handleLogin}>Login/Signup</Button>}

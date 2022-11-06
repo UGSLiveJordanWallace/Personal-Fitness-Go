@@ -1,6 +1,6 @@
 import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { Accordion, Button, Card, Form, Table } from 'react-bootstrap'
+import { Accordion, Button, Card, Table } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
 import "../../App.css"
@@ -53,11 +53,18 @@ const CW = () => {
       tempSecs = tempSecs + 1;
     } else if (!isWorkingOut) {
       clearTimeout(timeoutInt);
-      return
+      return;
     }
-    setHours(tempHours);
-    setMins(tempMins);
-    setSecs(tempSecs);
+    setHours(timeFormat(tempHours));
+    setMins(timeFormat(tempMins));
+    setSecs(timeFormat(tempSecs));
+  }
+  function timeFormat(time) {
+    if (time.toString().length < 2) {
+      return `0${time}`;
+    } else {
+      return time;
+    }
   }
 
   useEffect(() => {
@@ -106,7 +113,7 @@ const CW = () => {
                     <Table size="lg" responsive={true}>
                       <thead>
                           <tr>
-                              <th>Workout Name</th>
+                              <th>Set Name</th>
                               <th>Reps</th>
                           </tr>
                       </thead>
